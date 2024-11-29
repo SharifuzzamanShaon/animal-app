@@ -14,7 +14,7 @@ app.get("/health", (req, res) => {
 });
 app.use(
   cors({
-    origin: [process.env.CLIENT_side_port, process.env.ADMIN_side_port],
+    origin: [process.env.CLIENT_side_port],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true, 
   })

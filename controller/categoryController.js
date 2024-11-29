@@ -18,8 +18,8 @@ const addCategory = async (req, res, next) => {
     const category = new Category({ name });
     await category.save();
     res.status(201).json({
+      success: true,
       message: "Category created successfully",
-      category,
     });
   } catch (error) {
     next(error);

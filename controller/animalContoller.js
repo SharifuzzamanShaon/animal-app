@@ -5,7 +5,7 @@ const { uploadOnCloudinary } = require("./../utils/uploadFiles");
 
 const addAnimal = async (req, res, next) => {
   try {
-    const { name, img, categoryId } = req.body; // Extract data from the request body
+    const { name, img, categoryId } = req.body; 
 
     const category = await Category.findById(categoryId);
     if (!category) {
@@ -25,20 +25,29 @@ const addAnimal = async (req, res, next) => {
     const response = await uploadOnCloudinary(img);
     const imageUrl = response.secure_url;
 
-    const newAnimal = new Animal({ name, imageUrl, categoryId }).populate(
-      "name"
-    );
+    const newAnimal = new Animal({ name, imageUrl, categoryId });
     await newAnimal.save();
-    const animal = await Animal.findById(newAnimal._id).populate(
+     await Animal.findById(newAnimal._id).populate(
       "categoryId",
       "name"
     );
     res.status(201).json({
-      message: "Animal created successfully",
-      animal,
+      success:true,
+      message: "Animal created successfully"
     });
   } catch (error) {
     next(error);
+  }
+};
+const getAllAnimal = async (req, res, next) => {
+  try {
+    const animals = await Animal.find();
+    res.status(200).json({
+      success: true,
+      data: animals,
+    });
+  } catch (error) {
+    next(error); 
   }
 };
 const findAnimalsByCategory = async (req, res, next) => {
@@ -56,12 +65,6 @@ const findAnimalsByCategory = async (req, res, next) => {
       "categoryId",
       "name"
     );
-
-    if (animals.length === 0) {
-      return res
-        .status(404)
-        .json({ message: "No animals found for the given category" });
-    }
     res.status(200).json({
       message: "Animals retrieved successfully",
       animals,
@@ -70,4 +73,4 @@ const findAnimalsByCategory = async (req, res, next) => {
     next(error);
   }
 };
-module.exports = { addAnimal, findAnimalsByCategory };
+module.exports = { addAnimal, getAllAnimal, findAnimalsByCategory };
