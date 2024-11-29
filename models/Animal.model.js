@@ -22,7 +22,6 @@ const animalSchema = new mongoose.Schema(
   }
 );
 
-// Create the model
 const Animal = mongoose.model("Animal", animalSchema);
 
 module.exports = Animal;
